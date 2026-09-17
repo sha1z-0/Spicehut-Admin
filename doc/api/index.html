@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="spicehut_admin_panel API docs, for the Dart programming language.">
+  <title>spicehut_admin_panel - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">spicehut_admin_panel package</li>
+  </ol>
+  <div class="self-name">spicehut_admin_panel</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="spice-hut-admin--backend-system">Spice Hut Admin &amp; Backend System</h1>
+<p>Complete restaurant management system with Flutter frontend and Next.js backend.</p>
+<h2 id="-documentation">📚 Documentation</h2>
+<p><strong>Main Reference:</strong> See <a href="COMPLETE_DOCUMENTATION.md">COMPLETE_DOCUMENTATION.md</a> for full details.</p>
+<h2 id="-architecture">🏗️ Architecture</h2>
+<ul>
+<li><strong>Frontend:</strong> Flutter (Android/iOS/Web/Windows)</li>
+<li><strong>Backend:</strong> Next.js + Node.js</li>
+<li><strong>Database:</strong> MongoDB Atlas</li>
+<li><strong>Locations:</strong> 10 branches</li>
+</ul>
+<h2 id="-quick-start">🚀 Quick Start</h2>
+<h3 id="backend-terminal-1">Backend (Terminal 1)</h3>
+<pre class="language-bash"><code class="language-bash">cd backend
+npm start
+# Server at http://localhost:4000
+</code></pre>
+<h3 id="frontend-terminal-2">Frontend (Terminal 2)</h3>
+<pre class="language-bash"><code class="language-bash">flutter run -d chrome
+</code></pre>
+<h2 id="-test-login">🔐 Test Login</h2>
+<ul>
+<li>Email: <code>superadmin@spicehut.com</code></li>
+<li>Password: See backend .env</li>
+</ul>
+<h2 id="-main-screens">📱 Main Screens</h2>
+<ol>
+<li>Sign In</li>
+<li>Dashboard</li>
+<li>Incoming Orders</li>
+<li>Order History</li>
+<li>Analytics</li>
+<li>In-House Tables</li>
+<li>Menu Management</li>
+<li>User Management</li>
+<li>Printer Setup</li>
+</ol>
+<h2 id="-api-endpoints">🔌 API Endpoints</h2>
+<ul>
+<li><code>POST /auth/login</code> - Authentication</li>
+<li><code>GET/POST/PUT/PATCH/DELETE /orders</code> - Order management</li>
+<li><code>GET/POST/PUT/DELETE /menu</code> - Menu management</li>
+<li><code>GET/POST/PATCH/DELETE /tables</code> - Table management</li>
+<li><code>GET/POST/PUT/PATCH /users</code> - User management</li>
+<li><code>GET /analytics</code> - Analytics data</li>
+<li><code>GET /branches</code> - Branches list</li>
+</ul>
+<h2 id="-configuration">⚙️ Configuration</h2>
+<h3 id="api-base-url-libservicesapi_servicedart">API Base URL (lib/services/api_service.dart)</h3>
+<pre class="language-dart"><code class="language-dart">static const String baseUrl = 'http://localhost:4000/api';
+// For Android Emulator: 'http://10.0.2.2:4000/api'
+// For Physical Device: 'http://192.168.x.x:4000/api'
+</code></pre>
+<h2 id="-app-store-publishing-guide">📦 App Store Publishing Guide</h2>
+<p>This section covers the full release process for <strong>Google Play</strong> and <strong>Apple App Store</strong>.</p>
+<h3 id="-shared-prerequisites">✅ Shared Prerequisites</h3>
+<ol>
+<li>Backend is deployed and stable.</li>
+<li>App branding is final (icon, name, splash, screenshots).</li>
+<li>Privacy policy URL is available (required on both stores).</li>
+<li>Store accounts are active:
+<ul>
+<li>Google Play Console (one-time fee)</li>
+<li>Apple Developer Program (annual fee)</li>
+</ul>
+</li>
+<li>Verify production API endpoints in <a href="lib/services/api_service.dart">lib/services/api_service.dart</a>.</li>
+</ol>
+<h3 id="-google-play-store-android">🟢 Google Play Store (Android)</h3>
+<h4 id="1-update-version">1. Update version</h4>
+<p>Edit <code>pubspec.yaml</code> and increment:</p>
+<pre class="language-dart"><code>version: 1.0.0+1
+</code></pre>
+<ul>
+<li><code>1.0.0</code> is the app version.</li>
+<li><code>+1</code> is the build number (must increase every upload).</li>
+</ul>
+<h4 id="2-create-a-release-build-aab">2. Create a release build (AAB)</h4>
+<pre class="language-dart"><code>flutter build appbundle --release
+</code></pre>
+<p>Output file:</p>
+<pre class="language-dart"><code>build/app/outputs/bundle/release/app-release.aab
+</code></pre>
+<h4 id="3-configure-signing-if-not-already">3. Configure signing (if not already)</h4>
+<p>Create a keystore (once):</p>
+<pre class="language-dart"><code>keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+</code></pre>
+<p>Create <code>android/key.properties</code> (do not commit):</p>
+<pre class="language-dart"><code>storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=upload-keystore.jks
+</code></pre>
+<p>Update <code>android/app/build.gradle</code> to use <code>key.properties</code> for the <code>release</code> signing config.</p>
+<h4 id="4-create-the-app-in-play-console">4. Create the app in Play Console</h4>
+<ol>
+<li>Go to Play Console &gt; Create App.</li>
+<li>Fill name, default language, app type, and category.</li>
+<li>Complete the "App content" section (privacy policy, data safety, ads, content rating).</li>
+</ol>
+<h4 id="5-upload-release">5. Upload release</h4>
+<ol>
+<li>Go to <strong>Production</strong> &gt; <strong>Create release</strong>.</li>
+<li>Upload the <code>.aab</code> file.</li>
+<li>Add release notes.</li>
+</ol>
+<h4 id="6-store-listing-assets">6. Store listing assets</h4>
+<ul>
+<li>App icon (512x512)</li>
+<li>Feature graphic (1024x500)</li>
+<li>Screenshots (phone and tablet recommended)</li>
+<li>Short and full descriptions</li>
+</ul>
+<h4 id="7-submit-for-review">7. Submit for review</h4>
+<p>Review warnings and submit. Typical review time: hours to a few days.</p>
+<h3 id="-apple-app-store-ios">🍎 Apple App Store (iOS)</h3>
+<h4 id="1-update-version-2">1. Update version</h4>
+<p>Same <code>pubspec.yaml</code> change as Android. Build number must increase for every upload.</p>
+<h4 id="2-build-release-ipa">2. Build release IPA</h4>
+<pre class="language-dart"><code>flutter build ipa --release
+</code></pre>
+<p>Output:</p>
+<pre class="language-dart"><code>build/ios/ipa/*.ipa
+</code></pre>
+<h4 id="3-configure-signing-in-xcode">3. Configure signing in Xcode</h4>
+<p>Open iOS project:</p>
+<pre class="language-dart"><code>open ios/Runner.xcworkspace
+</code></pre>
+<p>In Xcode:</p>
+<ul>
+<li>Set the correct team</li>
+<li>Confirm bundle ID matches App Store Connect</li>
+<li>Ensure provisioning profile is valid</li>
+</ul>
+<h4 id="4-create-the-app-in-app-store-connect">4. Create the app in App Store Connect</h4>
+<ol>
+<li>Go to App Store Connect &gt; My Apps &gt; New App.</li>
+<li>Fill app name, bundle ID, SKU, and language.</li>
+</ol>
+<h4 id="5-upload-the-build">5. Upload the build</h4>
+<p>Use Xcode Organizer:</p>
+<ol>
+<li>Product &gt; Archive</li>
+<li>Distribute App &gt; App Store Connect</li>
+</ol>
+<p>Alternative: use Apple Transporter to upload the <code>.ipa</code>.</p>
+<h4 id="6-store-listing-assets-2">6. Store listing assets</h4>
+<ul>
+<li>App icon</li>
+<li>Screenshots (required sizes for iPhone and iPad)</li>
+<li>Description, keywords, support URL, privacy policy URL</li>
+</ul>
+<h4 id="7-app-privacy-and-review">7. App Privacy and Review</h4>
+<p>Complete the App Privacy questionnaire and fill review info, then submit.</p>
+<h3 id="-ios-specific-configuration-required">🍏 iOS-Specific Configuration (Required)</h3>
+<h4 id="1-infoplist-permissions">1. Info.plist permissions</h4>
+<p>Ensure the required permission strings exist in <a href="ios/Runner/Info.plist">ios/Runner/Info.plist</a>:</p>
+<ul>
+<li><code>NSCameraUsageDescription</code></li>
+<li><code>NSPhotoLibraryUsageDescription</code></li>
+<li><code>NSPhotoLibraryAddOnlyUsageDescription</code></li>
+<li><code>NSMicrophoneUsageDescription</code></li>
+<li><code>NSBluetoothAlwaysUsageDescription</code></li>
+<li><code>NSBluetoothPeripheralUsageDescription</code></li>
+<li><code>NSLocalNetworkUsageDescription</code></li>
+</ul>
+<h4 id="2-background-audio-mode-ringtone-support">2. Background audio mode (ringtone support)</h4>
+<p>To allow ringtone playback when the app is not in the foreground, iOS needs background audio:</p>
+<ul>
+<li><code>UIBackgroundModes</code> includes <code>audio</code> (already configured in Info.plist).</li>
+</ul>
+<h4 id="3-push-notifications-optional-for-true-background-alerts">3. Push notifications (optional, for true background alerts)</h4>
+<p>This app currently uses <strong>HTTP polling</strong> for new orders. iOS will not run polling while the app is suspended.
+If you need background alerts, you must implement APNs push notifications:</p>
+<ol>
+<li>In Xcode: enable <strong>Push Notifications</strong> capability.</li>
+<li>In Xcode: enable <strong>Background Modes</strong> &gt; <strong>Remote notifications</strong>.</li>
+<li>Add an <code>aps-environment</code> entitlement (Xcode does this automatically).</li>
+<li>Implement push handling in Flutter (e.g., Firebase Messaging).</li>
+<li>Configure APNs keys in Apple Developer portal and in your backend.</li>
+</ol>
+<h3 id="-final-release-checklist">✅ Final Release Checklist</h3>
+<ul>
+<li>Version + build number updated</li>
+<li>Release build signed</li>
+<li>Store listings completed</li>
+<li>Privacy policy URL added</li>
+<li>App content / privacy forms completed</li>
+<li>Release notes added</li>
+<li>Submitted for review</li>
+</ul>
+<h2 id="-troubleshooting">🛠️ Troubleshooting</h2>
+<ul>
+<li><strong>Connection refused:</strong> Check backend is running, verify baseUrl</li>
+<li><strong>Login fails:</strong> Check credentials, verify MongoDB connection</li>
+<li><strong>White screen:</strong> Try <code>flutter clean</code>, check internet permission</li>
+</ul>
+<h2 id="-full-documentation">📖 Full Documentation</h2>
+<p>See <a href="COMPLETE_DOCUMENTATION.md">COMPLETE_DOCUMENTATION.md</a> for:</p>
+<ul>
+<li>Complete API reference</li>
+<li>Database schema</li>
+<li>All credentials</li>
+<li>Deployment checklist</li>
+<li>Development workflow</li>
+</ul>
+<hr>
+<p><strong>Status:</strong> Production Ready | <strong>Version:</strong> 1.0.0 | <strong>Updated:</strong> January 19, 2026</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="main">
+  <span class="name"><a href="main/">main</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="menu_item">
+  <span class="name"><a href="models_menu_item/">models\menu_item</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="age_verification_screen">
+  <span class="name"><a href="screens_age_verification_screen/">screens\age_verification_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="analytics_screen">
+  <span class="name"><a href="screens_analytics_screen/">screens\analytics_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="dashboard_screen">
+  <span class="name"><a href="screens_dashboard_screen/">screens\dashboard_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="in_house_orders_screen">
+  <span class="name"><a href="screens_in_house_orders_screen/">screens\in_house_orders_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="incoming_orders_screen">
+  <span class="name"><a href="screens_incoming_orders_screen/">screens\incoming_orders_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="menu_management_screen">
+  <span class="name"><a href="screens_menu_management_screen/">screens\menu_management_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="on_call_orders_screen">
+  <span class="name"><a href="screens_on_call_orders_screen/">screens\on_call_orders_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="order_history_screen">
+  <span class="name"><a href="screens_order_history_screen/">screens\order_history_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="permissions_screen">
+  <span class="name"><a href="screens_permissions_screen/">screens\permissions_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="privacy_policy_modal">
+  <span class="name"><a href="screens_privacy_policy_modal/">screens\privacy_policy_modal</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="sign_in_screen">
+  <span class="name"><a href="screens_sign_in_screen/">screens\sign_in_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="user_management_screen">
+  <span class="name"><a href="screens_user_management_screen/">screens\user_management_screen</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="analytics_report_service">
+  <span class="name"><a href="services_analytics_report_service/">services\analytics_report_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="api_service">
+  <span class="name"><a href="services_api_service/">services\api_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="auth_service">
+  <span class="name"><a href="services_auth_service/">services\auth_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="logger_service">
+  <span class="name"><a href="services_logger_service/">services\logger_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="order_notification_service">
+  <span class="name"><a href="services_order_notification_service/">services\order_notification_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="permissions_service">
+  <span class="name"><a href="services_permissions_service/">services\permissions_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="printing_service">
+  <span class="name"><a href="services_printing_service/">services\printing_service</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="dialog_utils">
+  <span class="name"><a href="utils_dialog_utils/">utils\dialog_utils</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="external_links">
+  <span class="name"><a href="utils_external_links/">utils\external_links</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="printer_setup_guide_modal">
+  <span class="name"><a href="widgets_printer_setup_guide_modal/">widgets\printer_setup_guide_modal</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">spicehut_admin_panel package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">spicehut_admin_panel</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="main/">main</a></li>
+      <li><a href="models_menu_item/">models\menu_item</a></li>
+      <li><a href="screens_age_verification_screen/">screens\age_verification_screen</a></li>
+      <li><a href="screens_analytics_screen/">screens\analytics_screen</a></li>
+      <li><a href="screens_dashboard_screen/">screens\dashboard_screen</a></li>
+      <li><a href="screens_in_house_orders_screen/">screens\in_house_orders_screen</a></li>
+      <li><a href="screens_incoming_orders_screen/">screens\incoming_orders_screen</a></li>
+      <li><a href="screens_menu_management_screen/">screens\menu_management_screen</a></li>
+      <li><a href="screens_on_call_orders_screen/">screens\on_call_orders_screen</a></li>
+      <li><a href="screens_order_history_screen/">screens\order_history_screen</a></li>
+      <li><a href="screens_permissions_screen/">screens\permissions_screen</a></li>
+      <li><a href="screens_privacy_policy_modal/">screens\privacy_policy_modal</a></li>
+      <li><a href="screens_sign_in_screen/">screens\sign_in_screen</a></li>
+      <li><a href="screens_user_management_screen/">screens\user_management_screen</a></li>
+      <li><a href="services_analytics_report_service/">services\analytics_report_service</a></li>
+      <li><a href="services_api_service/">services\api_service</a></li>
+      <li><a href="services_auth_service/">services\auth_service</a></li>
+      <li><a href="services_logger_service/">services\logger_service</a></li>
+      <li><a href="services_order_notification_service/">services\order_notification_service</a></li>
+      <li><a href="services_permissions_service/">services\permissions_service</a></li>
+      <li><a href="services_printing_service/">services\printing_service</a></li>
+      <li><a href="utils_dialog_utils/">utils\dialog_utils</a></li>
+      <li><a href="utils_external_links/">utils\external_links</a></li>
+      <li><a href="widgets_printer_setup_guide_modal/">widgets\printer_setup_guide_modal</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    spicehut_admin_panel
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

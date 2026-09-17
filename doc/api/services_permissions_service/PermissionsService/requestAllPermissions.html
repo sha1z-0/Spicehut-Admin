@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the requestAllPermissions method from the PermissionsService class, for the Dart programming language.">
+  <title>requestAllPermissions method - PermissionsService class - permissions_service library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">spicehut_admin_panel</a></li>
+    <li><a href="../../services_permissions_service/">services\permissions_service.dart</a></li>
+    <li><a href="../../services_permissions_service/PermissionsService-class.html">PermissionsService</a></li>
+    <li class="self-crumb">requestAllPermissions static method</li>
+  </ol>
+  <div class="self-name">requestAllPermissions</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="services_permissions_service&#47;PermissionsService-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">requestAllPermissions</span> static method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://pub.dev/documentation/permission_handler_platform_interface/4.3.0/permission_handler_platform_interface/PermissionStatus.html">PermissionStatus</a></span>&gt;</span></span>
+<span class="name ">requestAllPermissions</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="requestAllPermissions-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Request all necessary runtime permissions from user</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static Future&lt;PermissionStatus&gt; requestAllPermissions(
+  BuildContext context,
+) async {
+  try {
+    &#47;&#47; Show explanation dialog first
+    await DialogUtils.showAnimatedDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) =&gt; AlertDialog(
+        title: const Text(&#39;Permissions Needed&#39;),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                &#39;This app needs the following permissions to function properly:&#39;,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              _buildPermissionItem(
+                icon: Icons.photo_camera,
+                title: &#39;Camera&#39;,
+                reason: &#39;To capture photos and scan items for order management&#39;,
+              ),
+              _buildPermissionItem(
+                icon: Icons.storage,
+                title: &#39;Storage&#39;,
+                reason: &#39;To save documents, receipts, and order records on your device&#39;,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () =&gt; Navigator.pop(ctx),
+            child: const Text(&#39;Cancel&#39;),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF7A00),
+            ),
+            onPressed: () =&gt; Navigator.pop(ctx),
+            child: const Text(
+              &#39;Grant Permissions&#39;,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    &#47;&#47; List of permissions to request (excluding INTERNET which is built-in)
+    final permissions = [
+      Permission.camera,
+      Permission.storage,
+    ];
+
+    &#47;&#47; Request all permissions at once
+    final Map&lt;Permission, PermissionStatus&gt; statuses =
+        await permissions.request();
+
+    &#47;&#47; Separate results
+    bool allGranted = true;
+    List&lt;String&gt; deniedPermissions = [];
+
+    statuses.forEach((permission, status) {
+      if (status.isDenied) {
+        deniedPermissions.add(_getPermissionName(permission));
+        allGranted = false;
+      } else if (status.isPermanentlyDenied) {
+        deniedPermissions.add(&#39;${_getPermissionName(permission)} (permanently)&#39;);
+        allGranted = false;
+      }
+    });
+
+    &#47;&#47; Show result to user
+    if (!allGranted &amp;&amp; deniedPermissions.isNotEmpty) {
+      await DialogUtils.showErrorDialog(
+        context: context,
+        title: &#39;Permissions Requested&#39;,
+        message:
+            &#39;Some permissions were not granted:\n\n${deniedPermissions.join(&#39;\n&#39;)}\n\nYou can enable them later in Settings.&#39;,
+        buttonText: &#39;OK&#39;,
+      );
+    } else if (allGranted) {
+      await DialogUtils.showSuccessDialog(
+        context: context,
+        title: &#39;Permissions Granted&#39;,
+        message:
+            &#39;All necessary permissions have been granted. The app is ready to use!&#39;,
+        buttonText: &#39;Continue&#39;,
+      );
+    }
+
+    return statuses.values.first;
+  } catch (e) {
+    await DialogUtils.showErrorDialog(
+      context: context,
+      title: &#39;Permission Error&#39;,
+      message: &#39;An error occurred while requesting permissions: $e&#39;,
+      buttonText: &#39;OK&#39;,
+    );
+    return PermissionStatus.denied;
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">spicehut_admin_panel</a></li>
+    <li><a href="../../services_permissions_service/">permissions_service</a></li>
+    <li><a href="../../services_permissions_service/PermissionsService-class.html">PermissionsService</a></li>
+    <li class="self-crumb">requestAllPermissions static method</li>
+</ol>
+
+    <h5>PermissionsService class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    spicehut_admin_panel
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,333 @@
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    SPICE HUT ADMIN USERS - CHEAT SHEET                       ║
+║                              Version 1.0                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         SAMPLE LOGIN CREDENTIALS                             │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🔑 SUPER ADMIN (Full System Access)                                        │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ Email:    superadmin@spicehut.com                                     │ │
+│  │ Password: SuperAdmin@123                                              │ │
+│  │ Access:   All 10 branches + User Management                           │ │
+│  │ Role:     superAdmin                                                  │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  🏪 COMOX BRANCH ADMIN                                                      │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ Email:    admin.comox@spicehut.com                                    │ │
+│  │ Password: ComoxAdmin@123                                              │ │
+│  │ Access:   Comox branch only (ordersComox collection)                  │ │
+│  │ Role:     branchAdmin                                                 │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  🏪 PORT ALBERNI BRANCH ADMIN                                               │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ Email:    admin.portalberni@spicehut.com                              │ │
+│  │ Password: PortAlberniAdmin@123                                        │ │
+│  │ Access:   Port Alberni branch only (ordersPortAlberni collection)     │ │
+│  │ Role:     branchAdmin                                                 │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                          AVAILABLE BRANCHES                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. Comox              6. Duncan         11. [Available for expansion]      │
+│  2. Port Alberni       7. Victoria                                          │
+│  3. Fort Saskatchewan  8. Kelowna        Collections created:              │
+│  4. Campbell River     9. Penticton      • ordersComox                     │
+│  5. Courtenay         10. Vernon         • ordersPort Alberni             │
+│                                          • ordersFortSaskatchewan          │
+│                                          • ... (7 more)                    │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                        SETUP INSTRUCTIONS                                    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  STEP 1: Navigate to backend                                               │
+│  $ cd backend                                                              │
+│                                                                              │
+│  STEP 2: Initialize database with sample data                              │
+│  $ npm run seed:admin-users                                                │
+│                                                                              │
+│  STEP 3: Start development server                                          │
+│  $ npm run dev                                                             │
+│                                                                              │
+│  STEP 4: Test login endpoint                                               │
+│  $ curl -X POST http://localhost:3000/api/auth/admin-login \              │
+│    -H "Content-Type: application/json" \                                   │
+│    -d '{"email": "admin.comox@spicehut.com", "password": "ComoxAdmin@123"}'│
+│                                                                              │
+│  ✅ You should receive admin info with branch access details               │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                          API ENDPOINTS                                       │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  📝 LOGIN                                                                   │
+│  POST /api/auth/admin-login                                                │
+│  Body: { "email": "...", "password": "..." }                               │
+│  Response: { adminId, email, name, role, branch, branches }               │
+│                                                                              │
+│  📊 GET BRANCH ORDERS                                                       │
+│  GET /api/admin/branch-orders?adminId=...&branch=Comox                     │
+│  Response: { orders[], branch, adminRole }                                 │
+│                                                                              │
+│  ⚠️  BRANCH ADMIN ACCESS CONTROL:                                          │
+│  • Comox admin can ONLY access: ordersComox                               │
+│  • Port Alberni admin can ONLY access: ordersPortAlberni                  │
+│  • Super admin can access: ALL branches                                    │
+│  • Requesting unauthorized branch returns: 403 Forbidden                  │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                    FILES CREATED & MODIFIED                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ✅ backend/models/AdminUser.ts                                            │
+│     → Mongoose schema with password hashing                                 │
+│                                                                              │
+│  ✅ backend/scripts/seed-admin-users.ts                                    │
+│     → Initializes collection with 3 sample admins                           │
+│                                                                              │
+│  ✅ backend/pages/api/auth/admin-login.ts                                  │
+│     → Authentication endpoint                                              │
+│                                                                              │
+│  ✅ backend/pages/api/admin/branch-orders.ts                               │
+│     → Branch-specific data retrieval with access control                   │
+│                                                                              │
+│  ✅ backend/types/AdminUser.types.ts                                       │
+│     → TypeScript interfaces and helper functions                           │
+│                                                                              │
+│  ✅ backend/package.json                                                   │
+│     → Added: "seed:admin-users" script                                     │
+│                                                                              │
+│  📄 ADMIN_USERS_GUIDE.md                                                   │
+│     → Complete documentation (1000+ lines)                                 │
+│                                                                              │
+│  📄 ADMIN_USERS_SETUP_SUMMARY.md                                           │
+│     → Setup instructions & overview                                        │
+│                                                                              │
+│  📄 ADMIN_USERS_ARCHITECTURE.md                                            │
+│     → Architecture diagrams & flows                                        │
+│                                                                              │
+│  📄 ADMIN_USERS_QUICK_REFERENCE.md                                         │
+│     → Quick reference card                                                 │
+│                                                                              │
+│  📄 This file (ADMIN_USERS_CHEAT_SHEET.txt)                               │
+│     → Printable cheat sheet                                                │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                      SECURITY FEATURES                                       │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ✓ Password hashing: bcrypt (10 salt rounds)                               │
+│  ✓ Email validation: Format check + uniqueness                             │
+│  ✓ Account status: Only active accounts can login                          │
+│  ✓ Branch isolation: Enforced at API level                                 │
+│  ✓ Role-based access: superAdmin vs branchAdmin                            │
+│  ✓ Audit trail: lastLogin timestamp tracking                               │
+│  ✓ Type safety: TypeScript throughout                                      │
+│  ✓ Database indexes: Fast queries on email, branch, role                   │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                    DATABASE SCHEMA SUMMARY                                   │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Collection: adminUsers                                                    │
+│                                                                              │
+│  {                                                                          │
+│    _id: ObjectId,                    [Auto-generated ID]                   │
+│    email: string,                    [UNIQUE, lowercase]                   │
+│    password: string,                 [Bcrypt hashed]                       │
+│    name: string,                     [Admin name]                          │
+│    role: "superAdmin" | "branchAdmin",                                     │
+│    branch: string | null,            [null for superAdmin]                 │
+│    branches: string[],               [Array of accessible branches]        │
+│    isActive: boolean,                [Account active status]               │
+│    lastLogin: Date,                  [Last successful login]               │
+│    createdAt: Date,                  [Created timestamp]                   │
+│    updatedAt: Date                   [Updated timestamp]                   │
+│  }                                                                          │
+│                                                                              │
+│  Indexes:                                                                  │
+│  • email (unique) → Fast email lookups                                     │
+│  • branch → Filter by branch                                              │
+│  • role → Query by admin role                                             │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                        TESTING GUIDE                                         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  TEST 1: Super Admin Login                                                │
+│  Email: superadmin@spicehut.com                                           │
+│  Password: SuperAdmin@123                                                  │
+│  Expected: ✅ SUCCESS with all 10 branches in response                    │
+│                                                                              │
+│  TEST 2: Comox Admin Login                                                │
+│  Email: admin.comox@spicehut.com                                          │
+│  Password: ComoxAdmin@123                                                  │
+│  Expected: ✅ SUCCESS with Comox in branch field                          │
+│                                                                              │
+│  TEST 3: Wrong Password                                                   │
+│  Email: admin.comox@spicehut.com                                          │
+│  Password: WrongPassword                                                   │
+│  Expected: ❌ FAIL with "Invalid email or password"                       │
+│                                                                              │
+│  TEST 4: Comox Admin Access Comox Orders                                  │
+│  AdminId: [comox admin ID]                                                │
+│  Branch: Comox                                                             │
+│  Expected: ✅ SUCCESS with orders array                                   │
+│                                                                              │
+│  TEST 5: Comox Admin Access Port Alberni Orders                           │
+│  AdminId: [comox admin ID]                                                │
+│  Branch: Port Alberni                                                      │
+│  Expected: ❌ FAIL with 403 Forbidden error                               │
+│                                                                              │
+│  TEST 6: Super Admin Access Port Alberni Orders                           │
+│  AdminId: [super admin ID]                                                │
+│  Branch: Port Alberni                                                      │
+│  Expected: ✅ SUCCESS with orders array                                   │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                     TROUBLESHOOTING                                          │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Problem: "MONGODB_URI not found"                                          │
+│  Solution: Check .env.local has MONGODB_URI=mongodb+srv://...              │
+│                                                                              │
+│  Problem: Seed script fails                                                │
+│  Solution: Ensure MongoDB is running and connection string is valid        │
+│                                                                              │
+│  Problem: Login says "Invalid email or password"                           │
+│  Solution: Verify exact email/password (case-sensitive), use table above   │
+│                                                                              │
+│  Problem: Access denied when trying to view orders                         │
+│  Solution: Verify admin is assigned to correct branch in database          │
+│                                                                              │
+│  Problem: Can't find orders collection                                     │
+│  Solution: Branch name must match exactly (e.g., "Comox" not "comox")     │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         QUICK COMMANDS                                       │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  # Initialize database                                                     │
+│  npm run seed:admin-users                                                  │
+│                                                                              │
+│  # Start development server                                                │
+│  npm run dev                                                               │
+│                                                                              │
+│  # Test super admin login                                                  │
+│  curl -X POST http://localhost:3000/api/auth/admin-login \                │
+│    -H "Content-Type: application/json" \                                   │
+│    -d '{"email":"superadmin@spicehut.com","password":"SuperAdmin@123"}'   │
+│                                                                              │
+│  # Test Comox admin login                                                  │
+│  curl -X POST http://localhost:3000/api/auth/admin-login \                │
+│    -H "Content-Type: application/json" \                                   │
+│    -d '{"email":"admin.comox@spicehut.com","password":"ComoxAdmin@123"}'  │
+│                                                                              │
+│  # View MongoDB collection                                                 │
+│  # (In MongoDB Atlas Dashboard or MongoDB Compass)                        │
+│  # Select spicehutDB → adminUsers                                         │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                        DEPLOYMENT CHECKLIST                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Pre-Deployment:                                                           │
+│  ☐ All 8 files created successfully                                        │
+│  ☐ package.json updated with seed script                                  │
+│  ☐ Code reviewed for security issues                                       │
+│  ☐ Types are correct and complete                                         │
+│                                                                              │
+│  Deployment:                                                               │
+│  ☐ Push code to production repository                                      │
+│  ☐ Set MONGODB_URI in production .env                                      │
+│  ☐ Run: npm install                                                        │
+│  ☐ Run: npm run seed:admin-users                                           │
+│  ☐ Verify 3 admins in MongoDB                                              │
+│  ☐ Start application server                                                │
+│  ☐ Test login endpoints in production                                      │
+│                                                                              │
+│  Post-Deployment:                                                          │
+│  ☐ Verify all 3 test logins work                                           │
+│  ☐ Test branch access control                                              │
+│  ☐ Monitor login attempts                                                  │
+│  ☐ Set up admin user management (future)                                   │
+│  ☐ Document production credentials (secure vault)                          │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                           NEXT STEPS                                         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. Run seed script: npm run seed:admin-users                              │
+│  2. Test login with provided credentials                                   │
+│  3. Verify database has 3 admin users                                      │
+│  4. Create login form in Flutter/React frontend                            │
+│  5. Connect frontend to /api/auth/admin-login endpoint                     │
+│  6. Store returned admin info in session/local storage                     │
+│  7. Implement branch-based dashboard                                       │
+│  8. Add more branch admins as needed                                       │
+│  9. Create admin management API (future)                                   │
+│  10. Set up monitoring and alerts                                          │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        STATUS: ✅ READY FOR USE                             ║
+║                                                                              ║
+║  All files created and configured successfully.                            ║
+║  Database is ready for initialization.                                      ║
+║  APIs are ready for testing.                                                ║
+║  Documentation is complete.                                                 ║
+║                                                                              ║
+║  Start with: npm run seed:admin-users                                       ║
+║  Then: npm run dev                                                          ║
+║  Then: Test with curl commands above                                        ║
+║                                                                              ║
+║  Questions? See ADMIN_USERS_GUIDE.md for complete documentation            ║
+║                                                                              ║
+║  Created: January 17, 2026                                                  ║
+║  Version: 1.0                                                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```

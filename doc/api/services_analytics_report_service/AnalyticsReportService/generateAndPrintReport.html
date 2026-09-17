@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the generateAndPrintReport method from the AnalyticsReportService class, for the Dart programming language.">
+  <title>generateAndPrintReport method - AnalyticsReportService class - analytics_report_service library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">spicehut_admin_panel</a></li>
+    <li><a href="../../services_analytics_report_service/">services\analytics_report_service.dart</a></li>
+    <li><a href="../../services_analytics_report_service/AnalyticsReportService-class.html">AnalyticsReportService</a></li>
+    <li class="self-crumb">generateAndPrintReport static method</li>
+  </ol>
+  <div class="self-name">generateAndPrintReport</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="services_analytics_report_service&#47;AnalyticsReportService-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">generateAndPrintReport</span> static method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">generateAndPrintReport</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="generateAndPrintReport-param-branchName"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">branchName</span>, </span></li>
+<li><span class="parameter" id="generateAndPrintReport-param-data"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static Future&lt;void&gt; generateAndPrintReport({
+  required String branchName,
+  required Map&lt;String, dynamic&gt; data,
+}) async {
+  final fontRegular = await PdfGoogleFonts.notoSansRegular();
+  final fontBold = await PdfGoogleFonts.notoSansBold();
+
+  final doc = pw.Document(
+    theme: pw.ThemeData.withFont(
+      base: fontRegular,
+      bold: fontBold,
+    ),
+  );
+
+  final logoBytes = await rootBundle.load(&#39;assets&#47;logo&#47;spicehut_logo.png&#39;);
+  final logoImage = pw.MemoryImage(logoBytes.buffer.asUint8List());
+
+  final counts = (data[&#39;counts&#39;] as Map?) ?? {};
+  final countsToday = (data[&#39;countsToday&#39;] as Map?) ?? {};
+  final sales = (data[&#39;sales&#39;] as Map?) ?? {};
+  final topItems = (data[&#39;topItems&#39;] as List?) ?? [];
+  final inHouseData = (data[&#39;inHouse&#39;] as Map?) ?? {};
+  final inHouseTopItems = (inHouseData[&#39;topItems&#39;] as List?) ?? [];
+  final todayVoidedByUser = (inHouseData[&#39;todayVoidedByUser&#39;] as List?) ?? [];
+  final monthVoidedByUser = (inHouseData[&#39;monthVoidedByUser&#39;] as List?) ?? [];
+
+  final totalOrders = _num(counts[&#39;total&#39;]);
+  final acceptedOrders = _num(counts[&#39;accepted&#39;]);
+  final rejectedOrders = _num(counts[&#39;rejected&#39;]);
+  final completedOrders = _num(counts[&#39;completed&#39;]);
+  final failedOrders = _num(counts[&#39;failed&#39;]);
+
+  final totalOrdersToday = _num(countsToday[&#39;total&#39;]);
+  final acceptedOrdersToday = _num(countsToday[&#39;accepted&#39;]);
+  final rejectedOrdersToday = _num(countsToday[&#39;rejected&#39;]);
+  final completedOrdersToday = _num(countsToday[&#39;completed&#39;]);
+  final failedOrdersToday = _num(countsToday[&#39;failed&#39;]);
+
+  final salesToday = _num(sales[&#39;today&#39;]);
+  final salesYesterday = _num(sales[&#39;yesterday&#39;]);
+  final salesThisMonth = _num(sales[&#39;month&#39;]);
+  final salesLastMonth = _num(sales[&#39;lastMonth&#39;]);
+
+  doc.addPage(
+    pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      margin: const pw.EdgeInsets.all(24),
+      build: (context) =&gt; [
+        pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.center,
+          children: [
+            pw.Image(logoImage, width: 64, height: 64),
+            pw.SizedBox(height: 8),
+            pw.Text(
+              &#39;SpiceHut&#39;,
+              style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+            ),
+            pw.SizedBox(height: 6),
+            pw.Text(
+              &#39;Analytics Report - $branchName&#39;,
+              style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold),
+            ),
+          ],
+        ),
+        pw.SizedBox(height: 10),
+        _sectionTitle(&#39;Order Summary (Today)&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Metric&#39;, &#39;Value&#39;],
+          data: [
+            [&#39;Total Orders Received&#39;, totalOrdersToday.toStringAsFixed(0)],
+            [&#39;Orders Accepted&#39;, acceptedOrdersToday.toStringAsFixed(0)],
+            [&#39;Orders Rejected&#39;, rejectedOrdersToday.toStringAsFixed(0)],
+            [&#39;Orders Completed&#39;, completedOrdersToday.toStringAsFixed(0)],
+            [&#39;Orders Failed&#39;, failedOrdersToday.toStringAsFixed(0)],
+          ],
+        ),
+        pw.SizedBox(height: 8),
+        _completedFailedDonut(
+          completedOrders: completedOrdersToday,
+          failedOrders: failedOrdersToday,
+        ),
+        pw.SizedBox(height: 16),
+        pw.NewPage(freeSpace: 220),
+        _sectionTitle(&#39;Order Summary (Monthly)&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Metric&#39;, &#39;Value&#39;],
+          data: [
+            [&#39;Total Orders Received&#39;, totalOrders.toStringAsFixed(0)],
+            [&#39;Orders Accepted&#39;, acceptedOrders.toStringAsFixed(0)],
+            [&#39;Orders Rejected&#39;, rejectedOrders.toStringAsFixed(0)],
+            [&#39;Orders Completed&#39;, completedOrders.toStringAsFixed(0)],
+            [&#39;Orders Failed&#39;, failedOrders.toStringAsFixed(0)],
+          ],
+        ),
+        pw.SizedBox(height: 8),
+        _completedFailedDonut(
+          completedOrders: completedOrders,
+          failedOrders: failedOrders,
+        ),
+        pw.SizedBox(height: 10),
+        pw.NewPage(freeSpace: 230),
+        _sectionTitle(&#39;Sales Performance&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Metric&#39;, &#39;Value&#39;],
+          data: [
+            [&#39;Total Sales Today&#39;, _money(salesToday)],
+            [&#39;Total Sales This Month&#39;, _money(salesThisMonth)],
+          ],
+        ),
+        pw.SizedBox(height: 6),
+        _barComparison(
+          title: &quot;Today&#39;s vs Yesterday&#39;s Sales&quot;,
+          leftLabel: &#39;Yesterday&#39;,
+          leftValue: salesYesterday,
+          rightLabel: &#39;Today&#39;,
+          rightValue: salesToday,
+        ),
+        pw.SizedBox(height: 4),
+        _barComparison(
+          title: &#39;This Month vs Last Month Sales&#39;,
+          leftLabel: &#39;Last Month&#39;,
+          leftValue: salesLastMonth,
+          rightLabel: &#39;This Month&#39;,
+          rightValue: salesThisMonth,
+        ),
+        pw.SizedBox(height: 16),
+        pw.NewPage(freeSpace: 160),
+        _sectionTitle(&#39;Top Ordered Items&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Rank&#39;, &#39;Item Name&#39;, &#39;Orders&#39;],
+          data: topItems.take(3).map&lt;List&lt;String&gt;&gt;((item) {
+            final map = item as Map&lt;String, dynamic&gt;;
+            return [
+              (map[&#39;rank&#39;] ?? &#39;&#39;).toString(),
+              (map[&#39;name&#39;] ?? &#39;Unknown&#39;).toString(),
+              (map[&#39;quantity&#39;] ?? 0).toString(),
+            ];
+          }).toList(),
+        ),
+        pw.SizedBox(height: 24),
+        pw.NewPage(freeSpace: 240),
+        _sectionTitle(&#39;In-House Orders (Today)&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Metric&#39;, &#39;Value&#39;],
+          data: [
+            [&#39;Total Orders&#39;, _num(inHouseData[&#39;todayOrders&#39;]).toStringAsFixed(0)],
+            [&#39;Revenue&#39;, _money(_num(inHouseData[&#39;todayRevenue&#39;]))],
+            [&#39;Cash Payments&#39;, _money(_num(inHouseData[&#39;todayCash&#39;]))],
+            [&#39;Card Payments&#39;, _money(_num(inHouseData[&#39;todayCard&#39;]))],
+            [&#39;Voided Orders&#39;, _num(inHouseData[&#39;todayVoided&#39;]).toStringAsFixed(0)],
+            [&#39;Total Tips&#39;, _money(_num(inHouseData[&#39;todayTips&#39;]))],
+            [&#39;Cash Tips&#39;, _money(_num(inHouseData[&#39;todayCashTips&#39;]))],
+            [&#39;Card Tips&#39;, _money(_num(inHouseData[&#39;todayCardTips&#39;]))],
+          ],
+        ),
+        pw.SizedBox(height: 16),
+        pw.NewPage(freeSpace: 240),
+        _sectionTitle(&#39;In-House Orders (Monthly)&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Metric&#39;, &#39;Value&#39;],
+          data: [
+            [&#39;Total Orders&#39;, _num(inHouseData[&#39;monthOrders&#39;]).toStringAsFixed(0)],
+            [&#39;Revenue&#39;, _money(_num(inHouseData[&#39;monthRevenue&#39;]))],
+            [&#39;Cash Payments&#39;, _money(_num(inHouseData[&#39;monthCash&#39;]))],
+            [&#39;Card Payments&#39;, _money(_num(inHouseData[&#39;monthCard&#39;]))],
+            [&#39;Voided Orders&#39;, _num(inHouseData[&#39;monthVoided&#39;]).toStringAsFixed(0)],
+            [&#39;Total Tips&#39;, _money(_num(inHouseData[&#39;monthTips&#39;]))],
+            [&#39;Cash Tips&#39;, _money(_num(inHouseData[&#39;monthCashTips&#39;]))],
+            [&#39;Card Tips&#39;, _money(_num(inHouseData[&#39;monthCardTips&#39;]))],
+          ],
+        ),
+        pw.SizedBox(height: 16),
+        pw.NewPage(freeSpace: 230),
+        _sectionTitle(&#39;In-House Voided Orders by User&#39;),
+        if (monthVoidedByUser.isEmpty)
+          pw.Text(&#39;No voided orders yet&#39;, style: const pw.TextStyle(fontSize: 10))
+        else
+          pw.TableHelper.fromTextArray(
+            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            cellAlignment: pw.Alignment.centerLeft,
+            headers: const [&#39;User&#39;, &#39;Today&#39;, &#39;Month&#39;],
+            data: () {
+              final todayMap = &lt;String, int&gt;{};
+              for (final row in todayVoidedByUser) {
+                final map = (row as Map).cast&lt;String, dynamic&gt;();
+                final user = (map[&#39;user&#39;] ?? &#39;Unknown&#39;).toString();
+                todayMap[user] = _num(map[&#39;count&#39;]).toInt();
+              }
+
+              return monthVoidedByUser.take(10).map&lt;List&lt;String&gt;&gt;((row) {
+                final map = (row as Map).cast&lt;String, dynamic&gt;();
+                final user = (map[&#39;user&#39;] ?? &#39;Unknown&#39;).toString();
+                final monthCount = _num(map[&#39;count&#39;]).toInt();
+                final todayCount = todayMap[user] ?? 0;
+                return [user, todayCount.toString(), monthCount.toString()];
+              }).toList();
+            }(),
+          ),
+        pw.SizedBox(height: 16),
+        pw.NewPage(freeSpace: 160),
+        _sectionTitle(&#39;Top In-House Items&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Rank&#39;, &#39;Item Name&#39;, &#39;Orders&#39;],
+          data: inHouseTopItems.take(3).map&lt;List&lt;String&gt;&gt;((item) {
+            final map = item as Map&lt;String, dynamic&gt;;
+            return [
+              (map[&#39;rank&#39;] ?? &#39;&#39;).toString(),
+              (map[&#39;name&#39;] ?? &#39;Unknown&#39;).toString(),
+              (map[&#39;quantity&#39;] ?? 0).toString(),
+            ];
+          }).toList(),
+        ),
+        pw.SizedBox(height: 16),
+        pw.NewPage(freeSpace: 140),
+        _sectionTitle(&#39;On-Call Takeaway Orders&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Period&#39;, &#39;Orders&#39;, &#39;Revenue&#39;],
+          data: [
+            [&#39;Today&#39;, _num(inHouseData[&#39;todayOnCallTakeaway&#39;]).toStringAsFixed(0), _money(_num(inHouseData[&#39;todayOnCallTakeawayRevenue&#39;]))],
+            [&#39;Month&#39;, _num(inHouseData[&#39;monthOnCallTakeaway&#39;]).toStringAsFixed(0), _money(_num(inHouseData[&#39;monthOnCallTakeawayRevenue&#39;]))],
+          ],
+        ),
+        pw.SizedBox(height: 16),
+        pw.NewPage(freeSpace: 140),
+        _sectionTitle(&#39;On-Call Delivery Orders&#39;),
+        pw.TableHelper.fromTextArray(
+          headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+          cellAlignment: pw.Alignment.centerLeft,
+          headers: const [&#39;Period&#39;, &#39;Orders&#39;, &#39;Revenue&#39;],
+          data: [
+            [&#39;Today&#39;, _num(inHouseData[&#39;todayOnCallDelivery&#39;]).toStringAsFixed(0), _money(_num(inHouseData[&#39;todayOnCallDeliveryRevenue&#39;]))],
+            [&#39;Month&#39;, _num(inHouseData[&#39;monthOnCallDelivery&#39;]).toStringAsFixed(0), _money(_num(inHouseData[&#39;monthOnCallDeliveryRevenue&#39;]))],
+          ],
+        ),
+      ],
+    ),
+  );
+
+  final pdfData = await doc.save();
+  await Printing.layoutPdf(onLayout: (_) async =&gt; pdfData);
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">spicehut_admin_panel</a></li>
+    <li><a href="../../services_analytics_report_service/">analytics_report_service</a></li>
+    <li><a href="../../services_analytics_report_service/AnalyticsReportService-class.html">AnalyticsReportService</a></li>
+    <li class="self-crumb">generateAndPrintReport static method</li>
+</ol>
+
+    <h5>AnalyticsReportService class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    spicehut_admin_panel
+      1.0.0+1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

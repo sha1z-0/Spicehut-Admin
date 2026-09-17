@@ -1,0 +1,11 @@
+flutter_launcher_icons:
+  image_path: "assets/logo/spicehut_logo.png"
+  android:
+    notification_icon: "ic_launcher"
+  ios: true
+  windows:
+    generate: false
+  macos:
+    generate: false
+  web:
+    generate: false
