@@ -9,6 +9,7 @@ build/
 
 # iOS
 ios/Pods/
+ios/Podfile.lock
 
 # Node
 node_modules/
