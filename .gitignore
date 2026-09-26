@@ -25,3 +25,5 @@ backend/node_modules/
 
 # Windows
 Thumbs.db
+
+local/

@@ -8,7 +8,7 @@ class ApiService {
   static const String baseUrl = 'https://spicehut-admin.vercel.app/api';
   static const String socketUrl = 'https://spicehut-admin.vercel.app';
   
-  static bool useMock = false; // Using real backend with MongoDB
+  static bool useMock = true; // Using real backend with MongoDB
   static final _MockApi _mock = _MockApi();
 
   // Get JWT token from SharedPreferences

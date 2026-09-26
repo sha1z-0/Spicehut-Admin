@@ -15,7 +15,7 @@ class OrderNotificationService with WidgetsBindingObserver {
   static final OrderNotificationService instance = OrderNotificationService._();
   static const String _logTag = 'OrderNotificationService';
 
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  AudioPlayer? _audioPlayer;
   final Set<String> _knownOrderIds = {};
   final Map<String, DateTime> _recentNotifyByOrder = {};
   final Set<String> _notifiedOrders = {};
@@ -74,8 +74,9 @@ class OrderNotificationService with WidgetsBindingObserver {
     _ringTimer?.cancel();
     _bannerTimer?.cancel();
     _overlayEntry?.remove();
-    await _audioPlayer.stop();
-    await _audioPlayer.dispose();
+    await _audioPlayer?.stop();
+    await _audioPlayer?.dispose();
+    _audioPlayer = null;
     _socket?.disconnect();
     _socket?.dispose();
   }
@@ -354,10 +355,11 @@ class OrderNotificationService with WidgetsBindingObserver {
       _lastRingAt = now;
       _isRinging = true;
       _ringTimer?.cancel();
-      await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource('sounds/ringtone.mp3'));
+      await _audioPlayer?.stop();
+      _audioPlayer ??= AudioPlayer();
+      await _audioPlayer!.play(AssetSource('sounds/ringtone.mp3'));
       _ringTimer = Timer(const Duration(seconds: 10), () async {
-        await _audioPlayer.stop();
+        await _audioPlayer?.stop();
         _isRinging = false;
       });
     } catch (_) {

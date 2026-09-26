@@ -10,7 +10,11 @@ import 'services/printer_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PrinterService.initialize();
+  try {
+    await PrinterService.initialize();
+  } catch (e, stack) {
+    LoggerService.error('Failed to initialize PrinterService', e, stack, 'Main');
+  }
   runApp(const MyApp());
 }
 

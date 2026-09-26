@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import '../services/permissions_service.dart';
 
 class PermissionsScreen extends StatefulWidget {
@@ -211,8 +212,8 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                               const SizedBox(height: 16),
                               _buildPermissionItem(
                                 icon: Icons.photo_library_rounded,
-                                title: Platform.isIOS ? 'Photos' : 'Storage',
-                                description: Platform.isIOS
+                                title: defaultTargetPlatform == TargetPlatform.iOS ? 'Photos' : 'Storage',
+                                description: defaultTargetPlatform == TargetPlatform.iOS
                                     ? 'Select and manage images from your photo library'
                                     : 'Access and save files/images used in the app',
                               ),

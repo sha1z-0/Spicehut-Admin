@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/foundation.dart';
 
 class PermissionsService {
   /// Request runtime permissions in sequence so iOS shows native prompts one-by-one.
@@ -48,14 +49,14 @@ class PermissionsService {
   }
 
   static List<Permission> _requiredPermissions() {
-    if (Platform.isIOS) {
+    if (!kIsWeb && Platform.isIOS) {
       return [
         Permission.camera,
         Permission.photos,
       ];
     }
 
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       return [
         Permission.camera,
         Permission.storage,
@@ -72,7 +73,7 @@ class PermissionsService {
 
   /// Check and request media library/storage permission based on platform.
   static Future<bool> requestStoragePermission() async {
-    if (Platform.isIOS) {
+    if (!kIsWeb && Platform.isIOS) {
       return await requestPermission(Permission.photos);
     }
     return await requestPermission(Permission.storage);
