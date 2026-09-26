@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
@@ -357,7 +357,8 @@ class OrderNotificationService with WidgetsBindingObserver {
       _ringTimer?.cancel();
       await _audioPlayer?.stop();
       _audioPlayer ??= AudioPlayer();
-      await _audioPlayer!.play(AssetSource('sounds/ringtone.mp3'));
+      await _audioPlayer!.setAsset('assets/sounds/ringtone.mp3');
+      _audioPlayer!.play();
       _ringTimer = Timer(const Duration(seconds: 10), () async {
         await _audioPlayer?.stop();
         _isRinging = false;
