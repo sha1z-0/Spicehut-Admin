@@ -1284,7 +1284,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       lineTouchData: LineTouchData(
                         enabled: true,
                         touchTooltipData: LineTouchTooltipData(
-                          tooltipRoundedRadius: 8,
                           tooltipPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           getTooltipColor: (touchedSpot) => const Color(0xFFFF7A00),
                           getTooltipItems: (touchedSpots) {
