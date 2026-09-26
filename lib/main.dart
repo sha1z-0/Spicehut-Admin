@@ -127,14 +127,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.orange,
         primaryColor: const Color(0xFFFF7A00),
         useMaterial3: true,
-        
-        // Smooth page transitions
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: <TargetPlatform, PageTransitionsBuilder>{
-            TargetPlatform.android: ZoomPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          },
-        ),
+
         
         // Dialog theme with backdrop blur
         dialogTheme: DialogThemeData(
