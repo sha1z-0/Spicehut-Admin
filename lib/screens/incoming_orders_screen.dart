@@ -354,6 +354,25 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
     }
   }
 
+  String? _parseAddress(Map<String, dynamic> json) {
+    if (json['customerAddress'] is String && json['customerAddress'].isNotEmpty) return json['customerAddress'];
+    if (json['deliveryAddress'] is String && json['deliveryAddress'].isNotEmpty) return json['deliveryAddress'];
+    if (json['address'] is String && json['address'].isNotEmpty) return json['address'];
+    if (json['delivery_address'] is String && json['delivery_address'].isNotEmpty) return json['delivery_address'];
+    
+    if (json['deliveryAddress'] is Map) {
+      final map = json['deliveryAddress'] as Map;
+      final addr = map['address'] ?? map['street'] ?? map['fullAddress'] ?? map['line1'];
+      if (addr != null && addr.toString().isNotEmpty) return addr.toString();
+    }
+    return null;
+  }
+
+  String? _parseOrderType(Map<String, dynamic> json) {
+    final t = json['orderType'] ?? json['order_type'] ?? json['type'] ?? json['deliveryType'] ?? json['deliveryMethod'];
+    return t?.toString();
+  }
+
   Order _mapOrderFromJson(Map<String, dynamic> json) {
     return Order(
       id: json['_id'] ?? json['orderId'] ?? '',
@@ -364,8 +383,8 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
       customerAvatar: json['customerAvatar'] ?? '👤',
       customerName: json['customerName'] ?? json['user']?['name'],
       customerPhone: json['customerPhone'] ?? json['user']?['phone'] ?? json['phone'],
-      customerAddress: json['customerAddress'] ?? json['address'] ?? (json['deliveryAddress'] is Map ? json['deliveryAddress']['address'] : (json['deliveryAddress'] is String ? json['deliveryAddress'] : null)) ?? json['deliveryDetails']?['address'],
-      orderType: json['deliveryType'] ?? json['orderType'] ?? json['type'] ?? json['method'],
+      customerAddress: _parseAddress(json),
+      orderType: _parseOrderType(json),
       tip: (json['tip'] as num?)?.toDouble(),
       status: json['status'] ?? 'incoming',
       items: (json['items'] as List?)
@@ -1118,9 +1137,10 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(order.customerName ?? 'Guest', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                          if (order.customerPhone != null) Text(order.customerPhone!, style: TextStyle(color: Colors.grey[700])),
-                          if (order.customerAddress != null) Text(order.customerAddress!, style: TextStyle(color: Colors.grey[700])),
-                          if (order.orderType != null) Text('Type: ${order.orderType!.toUpperCase()}', style: const TextStyle(color: Color(0xFFFF7A00), fontWeight: FontWeight.bold)),
+                          if (order.customerPhone != null && order.customerPhone!.isNotEmpty) Text(order.customerPhone!, style: TextStyle(color: Colors.grey[700])),
+                          if (order.orderType != null && order.orderType!.isNotEmpty) Text('Type: ${order.orderType!.toUpperCase()}', style: const TextStyle(color: Color(0xFFFF7A00), fontWeight: FontWeight.bold)),
+                          if (order.customerAddress != null && order.customerAddress!.isNotEmpty && order.orderType?.toLowerCase() != 'pickup' && order.orderType?.toLowerCase() != 'takeaway') 
+                            Text(order.customerAddress!, style: TextStyle(color: Colors.grey[700])),
                         ],
                       ),
                     ),
