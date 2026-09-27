@@ -355,20 +355,32 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
   }
 
   String? _parseAddress(Map<String, dynamic> json) {
+    if (json['deliveryLocation'] is Map) {
+      final loc = json['deliveryLocation'] as Map;
+      final addr = loc['address'];
+      if (addr != null && addr.toString().isNotEmpty) {
+        String fullAddress = addr.toString();
+        if (loc['city'] != null && loc['city'].toString().isNotEmpty) {
+          fullAddress += ', ${loc['city']}';
+        }
+        return fullAddress;
+      }
+    }
+    
+    // Fallbacks
     if (json['customerAddress'] is String && json['customerAddress'].isNotEmpty) return json['customerAddress'];
     if (json['deliveryAddress'] is String && json['deliveryAddress'].isNotEmpty) return json['deliveryAddress'];
     if (json['address'] is String && json['address'].isNotEmpty) return json['address'];
     if (json['delivery_address'] is String && json['delivery_address'].isNotEmpty) return json['delivery_address'];
-    
-    if (json['deliveryAddress'] is Map) {
-      final map = json['deliveryAddress'] as Map;
-      final addr = map['address'] ?? map['street'] ?? map['fullAddress'] ?? map['line1'];
-      if (addr != null && addr.toString().isNotEmpty) return addr.toString();
-    }
     return null;
   }
 
   String? _parseOrderType(Map<String, dynamic> json) {
+    if (json.containsKey('deliveryFee')) {
+      return json['deliveryFee'] == null ? 'pickup' : 'delivery';
+    }
+    
+    // Fallbacks
     final t = json['orderType'] ?? json['order_type'] ?? json['type'] ?? json['deliveryType'] ?? json['deliveryMethod'];
     return t?.toString();
   }
