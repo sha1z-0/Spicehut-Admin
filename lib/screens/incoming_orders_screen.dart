@@ -365,7 +365,7 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
       customerName: json['customerName'] ?? json['user']?['name'],
       customerPhone: json['customerPhone'] ?? json['user']?['phone'],
       customerAddress: json['customerAddress'] ?? (json['deliveryAddress'] != null ? json['deliveryAddress']['address'] : null),
-      orderType: json['orderType'],
+      orderType: json['type'] ?? json['orderType'],
       tip: (json['tip'] as num?)?.toDouble(),
       status: json['status'] ?? 'incoming',
       items: (json['items'] as List?)
@@ -913,12 +913,13 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Order ${order.orderNumber}',
-                      overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Order ${order.orderNumber}',
+                        overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -1070,9 +1071,12 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Order ${order.orderNumber}',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Text(
+                      'Order ${order.orderNumber}',
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),

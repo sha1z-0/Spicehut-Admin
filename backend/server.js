@@ -751,6 +751,36 @@ app.get('/api/dashboard/stats', verifyToken, async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
+async function enrichOrdersWithUserNames(orders) {
+  if (!orders || orders.length === 0) return orders;
+  const db = mongoose.connection.db;
+  const userIds = orders.map(o => o.userId || o.user_id).filter(id => id);
+  if (userIds.length === 0) return orders;
+  
+  const objectIds = userIds.map(id => {
+    try { return new mongoose.Types.ObjectId(id); } catch(e) { return id; }
+  });
+  
+  try {
+    const users = await db.collection('users').find({ _id: { $in: objectIds } }).toArray();
+    const userMap = {};
+    users.forEach(u => {
+      let name = u.name || u.username;
+      if (!name && u.firstName) name = u.firstName + (u.lastName ? ' ' + u.lastName : '');
+      userMap[u._id.toString()] = name;
+    });
+    
+    orders.forEach(o => {
+      const id = o.userId || o.user_id;
+      if (id && userMap[id.toString()]) {
+        o.customerName = userMap[id.toString()];
+      }
+    });
+  } catch (err) {
+    console.error('Error enriching users:', err);
+  }
+  return orders;
+}
 
 // Get Orders for Branch
 app.get('/api/orders', verifyToken, async (req, res) => {
@@ -793,6 +823,7 @@ app.get('/api/orders', verifyToken, async (req, res) => {
     }
     
     const orders = await collection.find(filter).sort({ createdAt: -1 }).toArray();
+    await enrichOrdersWithUserNames(orders);
     
     console.log(`   ✓ Found ${orders.length} orders in ${collectionName}`);
 
@@ -835,6 +866,7 @@ app.get('/api/orders/history', verifyToken, async (req, res) => {
     const orders = await collection.find({
       status: { $in: ['accepted', 'rejected', 'completed', 'failed'] }
     }).sort({ createdAt: -1 }).toArray();
+    await enrichOrdersWithUserNames(orders);
 
     res.json({ success: true, data: orders, branch: normalizedBranch, collectionName });
   } catch (error) {
