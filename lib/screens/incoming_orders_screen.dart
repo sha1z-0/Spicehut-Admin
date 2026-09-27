@@ -363,9 +363,9 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
               DateTime.now()).toLocal(),
       customerAvatar: json['customerAvatar'] ?? '👤',
       customerName: json['customerName'] ?? json['user']?['name'],
-      customerPhone: json['customerPhone'] ?? json['user']?['phone'],
-      customerAddress: json['customerAddress'] ?? (json['deliveryAddress'] != null ? json['deliveryAddress']['address'] : null),
-      orderType: json['type'] ?? json['orderType'],
+      customerPhone: json['customerPhone'] ?? json['user']?['phone'] ?? json['phone'],
+      customerAddress: json['customerAddress'] ?? json['address'] ?? (json['deliveryAddress'] is Map ? json['deliveryAddress']['address'] : (json['deliveryAddress'] is String ? json['deliveryAddress'] : null)) ?? json['deliveryDetails']?['address'],
+      orderType: json['deliveryType'] ?? json['orderType'] ?? json['type'] ?? json['method'],
       tip: (json['tip'] as num?)?.toDouble(),
       status: json['status'] ?? 'incoming',
       items: (json['items'] as List?)

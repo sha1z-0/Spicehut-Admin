@@ -767,13 +767,20 @@ async function enrichOrdersWithUserNames(orders) {
     users.forEach(u => {
       let name = u.name || u.username;
       if (!name && u.firstName) name = u.firstName + (u.lastName ? ' ' + u.lastName : '');
-      userMap[u._id.toString()] = name;
+      userMap[u._id.toString()] = { 
+        name: name, 
+        phone: u.phone || u.phoneNumber,
+        address: u.address || u.deliveryAddress || (u.addressDetails ? u.addressDetails.fullAddress : null)
+      };
     });
     
     orders.forEach(o => {
       const id = o.userId || o.user_id;
       if (id && userMap[id.toString()]) {
-        o.customerName = userMap[id.toString()];
+        const userData = userMap[id.toString()];
+        if (!o.customerName && userData.name) o.customerName = userData.name;
+        if (!o.customerPhone && userData.phone) o.customerPhone = userData.phone;
+        if (!o.customerAddress && !o.address && !o.deliveryAddress && userData.address) o.customerAddress = userData.address;
       }
     });
   } catch (err) {
