@@ -937,6 +937,7 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
                     ),
                   ],
                 ),
+                ),
                 // Customer Avatar
                 Container(
                   width: 50,
