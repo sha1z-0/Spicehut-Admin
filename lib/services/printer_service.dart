@@ -576,7 +576,7 @@ class PrinterService {
     String orderTypeLine = '';
     if (orderType == 'table') {
       orderTypeLine = 'Table: $tableNumber';
-    } else if (orderType == 'delivery' || orderType == 'takeaway' || orderType == 'pickup') {
+    } else if (orderType == 'delivery' || orderType == 'homeDelivery' || orderType == 'takeaway' || orderType == 'pickup') {
       orderTypeLine = '${orderType![0].toUpperCase()}${orderType.substring(1)}: $customerName';
     }
 
@@ -639,9 +639,9 @@ class PrinterService {
     }
 
     final subtotal = calculatedSubtotal > 0 ? calculatedSubtotal : totalAmount;
-    final gstAmount = subtotal * 0.05;
     final pstAmount = config.hasPst ? (alcoholSubtotal * 0.10) : 0.0;
-    final deliveryCharge = orderType == 'delivery' ? 5.0 : 0.0;
+    final deliveryCharge = (orderType == 'delivery' || orderType == 'homeDelivery') ? 5.0 : 0.0;
+    final gstAmount = (subtotal + deliveryCharge) * 0.05;
     
     final finalTotal = subtotal + gstAmount + pstAmount + deliveryCharge + (tip ?? 0);
 

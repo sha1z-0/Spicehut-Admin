@@ -32,6 +32,9 @@ class Order {
   final String? orderType;
   final List<OrderItem> items;
   final double? tip;
+  final double? tax;
+  final double? deliveryFee;
+  final double? totalAmount;
   String status; // 'incoming', 'accepted', 'rejected'
 
   Order({
@@ -45,6 +48,9 @@ class Order {
     this.orderType,
     required this.items,
     this.tip,
+    this.tax,
+    this.deliveryFee,
+    this.totalAmount,
     this.status = 'incoming',
   });
 }
@@ -398,6 +404,9 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
       customerAddress: _parseAddress(json),
       orderType: _parseOrderType(json),
       tip: (json['tip'] as num?)?.toDouble(),
+      tax: (json['tax'] as num?)?.toDouble() ?? 0.0,
+      deliveryFee: (json['deliveryFee'] as num?)?.toDouble() ?? 0.0,
+      totalAmount: (json['totalAmount'] as num?)?.toDouble(),
       status: json['status'] ?? 'incoming',
       items: (json['items'] as List?)
               ?.map((itemJson) => OrderItem(
@@ -1085,7 +1094,8 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
   void _showOrderDetailsDialog(Order order) {
     final isProcessing = order.status != 'incoming';
     final dateTimeFormatted = _formatDateTime(order.dateTime);
-    final total = _calculateTotal(order.items) + (order.tip ?? 0);
+    final itemTotal = _calculateTotal(order.items);
+    final total = order.totalAmount ?? (itemTotal + (order.tip ?? 0) + (order.tax ?? 0) + (order.deliveryFee ?? 0));
     
     DialogUtils.showAnimatedDialog(
       context: context,
@@ -1196,6 +1206,32 @@ class _IncomingOrdersScreenState extends State<IncomingOrdersScreen> with Widget
               const Divider(height: 32),
               
               // Totals
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Subtotal:', style: TextStyle(fontSize: 16)),
+                  Text('\$${itemTotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                ],
+              ),
+              const SizedBox(height: 4),
+              if ((order.deliveryFee ?? 0) > 0)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Delivery Fee:', style: TextStyle(fontSize: 16)),
+                    Text('\$${order.deliveryFee!.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                  ],
+                ),
+              if ((order.deliveryFee ?? 0) > 0) const SizedBox(height: 4),
+              if ((order.tax ?? 0) > 0)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('GST (5%):', style: TextStyle(fontSize: 16)),
+                    Text('\$${order.tax!.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                  ],
+                ),
+              if ((order.tax ?? 0) > 0) const SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
